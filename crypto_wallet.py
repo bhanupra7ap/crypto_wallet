@@ -20,7 +20,7 @@ import os
 def save_file(key):
 	try:
 		with open("KEY.txt") as p:
-			print("There is already a key file.... \n")
+			print("\033[1;31m There is already a key file.... \n")
 			while 1:
 				new = input("Enter another name for the new file (txt file)>>  ")
 				if not new.endswith(".txt"):
@@ -201,8 +201,8 @@ def del_usr():
 		print("\nUSER DATA DELETED SUCCESSFULLY....\n")
 
 def block(sender,reciever,amount):
-	empty = False
-	with open("block_chain.txt") as f:
+	empty = False								#checking for an empty blockchain file since every block depends on the previous block
+	with open("block_chain.txt") as f:					#the first block in a chain is called genesis. It can be a legit exchange or even a fake data to support the next block
 		f.seek(0, os.SEEK_END)
 		if f.tell():
 			f.seek(0)
@@ -210,18 +210,18 @@ def block(sender,reciever,amount):
 			empty = True
 		f.close()
 	
-	ledger = sender+reciever+amount
+	ledger = sender+reciever+amount						#making a ledger
 	hash_ledger = hashlib.sha256(ledger.encode("utf-8")).hexdigest()
 	
-	if empty == False:
+	if empty == False:							#all blocks other than genesis
 		pre_hash = ''
 		with open("block_chain.txt","r") as file:
 			lines = file.read().splitlines()
 			pre_hash = lines[-1]
 			file.close()
-		new_block = pre_hash + hash_ledger
-	if empty == True:
-		new_block = hash_ledger
+		new_block = pre_hash + hash_ledger				#adding the previous hashed block to the new hash
+	if empty == True:							#creating genesis with a legit exchange
+		new_block = hash_ledger						#doesn' require a pre-existing bock
 	
 	hash_new_block = hashlib.sha256(new_block.encode("utf-8")).hexdigest()
 	
