@@ -380,13 +380,10 @@ def recieve():
 
 #creating a hidden file to store user data
 try:
-	with open(".user.txt") as a:
-		a.close()
-		pass
-except:
 	a = open(".user.txt")
 	a.close()
-finally:
+except:
+	a = open(".user.txt","a")
 	a.close()
 
 #checking existence of file
